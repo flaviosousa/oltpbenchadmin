@@ -1,0 +1,176 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package oltpbenchadmin;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import javax.swing.*;
+import oltpbenchadmin.comm.ProxyConnection;
+import oltpbenchadmin.commons.Constants;
+import oltpbenchadmin.commons.ExecuteConfiguration;
+import oltpbenchadmin.commons.Workload;
+
+/**
+ *
+ * @author Leonardo Oliveira Moreira
+ */
+public class ExecutePanel extends JPanel {
+
+    private String title;
+    private JCheckBox execute;
+    private JComboBox proxy;
+    private JComboBox workload;
+    private JComboBox benchmarkClass;
+    private JTextField samplingWindow;
+    private JTextField outputFile;
+    private List<ProxyConnection> proxyConnectionList;
+
+    public ExecutePanel(String title, List<ProxyConnection> proxyConnectionList) {
+        super(null);
+        this.title = title;
+        this.proxyConnectionList = proxyConnectionList;
+        proxy = new JComboBox();
+        execute = new JCheckBox();
+        benchmarkClass = new JComboBox();
+        workload = new JComboBox();
+        samplingWindow = new JTextField();
+        outputFile = new JTextField();
+        build();
+        events();
+    }
+
+    private void build() {
+        int y = 10;
+
+        JLabel labelTemp;
+
+        labelTemp = new JLabel("Execute Configuration: ");
+        labelTemp.setOpaque(true);
+        labelTemp.setSize(150, 25);
+        labelTemp.setLocation(10, y);
+        add(labelTemp);
+
+        y += 35;
+
+        labelTemp = new JLabel("Execute: ");
+        labelTemp.setOpaque(true);
+        labelTemp.setSize(100, 25);
+        labelTemp.setLocation(10, y);
+        add(labelTemp);
+
+        execute.setSize(300, 25);
+        execute.setLocation(150, y);
+        execute.setSelected(true);
+        add(execute);
+
+        y += 35;
+
+        labelTemp = new JLabel("Proxy: ");
+        labelTemp.setOpaque(true);
+        labelTemp.setSize(100, 25);
+        labelTemp.setLocation(10, y);
+        add(labelTemp);
+
+        proxy.setSize(400, 25);
+        proxy.setLocation(150, y);
+        add(proxy);
+
+        y += 35;
+
+        labelTemp = new JLabel("Workload: ");
+        labelTemp.setOpaque(true);
+        labelTemp.setSize(100, 25);
+        labelTemp.setLocation(10, y);
+        add(labelTemp);
+
+        workload.setSize(400, 25);
+        workload.setLocation(150, y);
+        add(workload);
+
+        y += 35;
+
+        labelTemp = new JLabel("Benchmark class: ");
+        labelTemp.setOpaque(true);
+        labelTemp.setSize(120, 25);
+        labelTemp.setLocation(10, y);
+        add(labelTemp);
+
+        benchmarkClass.setSize(300, 25);
+        benchmarkClass.setLocation(150, y);
+        add(benchmarkClass);
+
+        y += 35;
+
+        labelTemp = new JLabel("Sampling window: ");
+        labelTemp.setOpaque(true);
+        labelTemp.setSize(120, 25);
+        labelTemp.setLocation(10, y);
+        add(labelTemp);
+
+        samplingWindow.setSize(300, 25);
+        samplingWindow.setLocation(150, y);
+        add(samplingWindow);
+
+        y += 35;
+
+        labelTemp = new JLabel("Output file: ");
+        labelTemp.setOpaque(true);
+        labelTemp.setSize(120, 25);
+        labelTemp.setLocation(10, y);
+        add(labelTemp);
+
+        outputFile.setSize(300, 25);
+        outputFile.setLocation(150, y);
+        add(outputFile);
+
+        for (String bc : Constants.BENCHMARK_CLASSES) {
+            benchmarkClass.addItem(bc);
+        }
+        updateForm();
+    }
+
+    public void updateForm() {
+        proxy.removeAllItems();
+        for (ProxyConnection pc : proxyConnectionList) {
+            proxy.addItem(pc);
+        }
+        workload.removeAllItems();
+        ProxyConnection pc = (ProxyConnection) proxy.getSelectedItem();
+        for (Workload w : pc.getWorkloadList()) {
+            workload.addItem(w);
+        }
+        benchmarkClass.setSelectedIndex(0);
+        samplingWindow.setText("");
+        outputFile.setText("");
+    }
+
+    private void events() {
+        proxy.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateForm();
+            }
+        });
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public ExecuteConfiguration getExecuteConfiguration() {
+        if (execute.isSelected()) {
+            ExecuteConfiguration ec = new ExecuteConfiguration();
+            ec.setProxyConnectionString(((ProxyConnection) proxy.getSelectedItem()).toString());
+            ec.setWorkload((Workload) workload.getSelectedItem());
+            ec.setBenchmarkClass(benchmarkClass.getSelectedItem().toString());
+            ec.setSamplingWindow(Long.parseLong(samplingWindow.getText()));
+            ec.setOutputFile(outputFile.getText());
+            return ec;
+        }
+        return null;
+    }
+}
