@@ -37,10 +37,12 @@ import oltpbenchadmin.icons.Icons;
 public class MainForm extends JFrame {
 
     private JMenuBar menuBar;
-    private JMenu menuFile, menuProxies, menuDatabase, menuWorkload;
+    private JMenu menuFile, menuProxies, menuDatabase, menuWorkload, menuHelp;
     private JMenuItem menuFileExit, menuProxiesAdd, menuProxiesRemove;
+    private JMenuItem menuCreateWorkload, menuDropWorkload;
     private JMenuItem menuCreateDatabase, menuDropDatabase;
     private JMenuItem menuCreateDatabaseSchema, menuLoadDatabase;
+    private JMenuItem menuAbout;
     private JToolBar toolBar;
     private JButton buttonRefreshBenchmarkProxies;
     private JButton buttonExit;
@@ -51,7 +53,9 @@ public class MainForm extends JFrame {
     private JTree treeProxyBenchmarks;
     private DefaultTreeModel modelProxyBenchmarks;
     private JButton buttonAddProxy, buttonRemoveProxy;
-    private JButton buttonDropDatabase, buttonCreateDatabase, buttonCreateSchemaDatabase, buttonLoadDatabase;
+    private JButton buttonDropWorkload, buttonCreateWorkload;
+    private JButton buttonDropDatabase, buttonCreateDatabase;
+    private JButton buttonCreateSchemaDatabase, buttonLoadDatabase;
     private List<ProxyConnection> proxyConnectionList;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyy hh:mm:ss");
     private Style styleTime, styleText, styleErrorTime, styleErrorText;
@@ -73,8 +77,12 @@ public class MainForm extends JFrame {
         menuDropDatabase = new JMenuItem("Drop Database");
         menuCreateDatabase = new JMenuItem("Create Database");
         menuWorkload = new JMenu("Workload");
+        menuDropWorkload = new JMenuItem("Drop Workload");
+        menuCreateWorkload = new JMenuItem("Create Workload");
         menuCreateDatabaseSchema = new JMenuItem("Create Database Schema");
         menuLoadDatabase = new JMenuItem("Load Data in Database");
+        menuHelp = new JMenu("Help");
+        menuAbout = new JMenuItem("About");
         toolBar = new JToolBar();
         buttonExit = new JButton();
         panelMain = new JPanel(new BorderLayout());
@@ -90,6 +98,8 @@ public class MainForm extends JFrame {
         buttonRefreshBenchmarkProxies = new JButton();
         buttonAddProxy = new JButton();
         buttonRemoveProxy = new JButton();
+        buttonDropWorkload = new JButton();
+        buttonCreateWorkload = new JButton();
         buttonDropDatabase = new JButton();
         buttonCreateDatabase = new JButton();
         buttonCreateSchemaDatabase = new JButton();
@@ -101,7 +111,7 @@ public class MainForm extends JFrame {
     }
 
     private void buildFrame() {
-        setTitle("oltpbenchadmin - A tool for OLTPBenchmark");
+        setTitle("oltpbenchadmin - A tool for OLTPBenchmark's administration");
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -163,7 +173,7 @@ public class MainForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (proxyConnectionList.size() > 0) {
                     String title = "Execute " + (++tabId);
-                    ExecutePanel executePanel = new ExecutePanel(title, proxyConnectionList);
+                    ExecutePanel executePanel = new ExecutePanel(getRef(), title, proxyConnectionList);
                     tabbedExecutes.addTab(executePanel.getTitle(), new ImageIcon(Icons.class.getResource("page_white_lightning.png")), executePanel);
                     executePanelList.add(executePanel);
                 } else {
@@ -204,6 +214,12 @@ public class MainForm extends JFrame {
                     JOptionPane.showMessageDialog(getRef(), "There is no set script for execution", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
+                for (ExecutePanel executePanel : executePanelList) {
+                    if (!executePanel.validateForm()) {
+                        JOptionPane.showMessageDialog(getRef(), "All fields of the execution scripts must be completed", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
+                }
                 List<ExecuteConfiguration> executeConfigurations = new ArrayList<ExecuteConfiguration>();
                 for (ExecutePanel ep : executePanelList) {
                     if (ep.getExecuteConfiguration() != null) {
@@ -231,8 +247,17 @@ public class MainForm extends JFrame {
                     JOptionPane.showMessageDialog(getRef(), "There can not be run scripts for the same proxy", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
-                for (ExecutePanel executePanel : executePanelList) {
+                List<ExecuteResult> executeResults = new ArrayList<ExecuteResult>();
+                List<ExecuteThread> executeThreads = new ArrayList<ExecuteThread>();
+                for (ExecuteConfiguration ec : executeConfigurations) {
+                    ExecuteThread executeThread = new ExecuteThread(proxyConnectionList, executeResults, ec);
+                    executeThreads.add(executeThread);
                 }
+                for (ExecuteThread et : executeThreads) {
+                    et.start();
+                }
+                while (executeResults.size() < executeConfigurations.size());
+                addLog("The execution scritps were finalized. Total: " + executeResults.size());
             }
         });
     }
@@ -243,13 +268,19 @@ public class MainForm extends JFrame {
         menuProxies.add(menuProxiesRemove);
         menuDatabase.add(menuCreateDatabase);
         menuDatabase.add(menuDropDatabase);
+        menuWorkload.add(menuCreateWorkload);
+        menuWorkload.add(menuDropDatabase);
+        menuWorkload.addSeparator();
         menuWorkload.add(menuCreateDatabaseSchema);
         menuWorkload.add(menuLoadDatabase);
+        menuHelp.add(menuAbout);
 
         menuFileExit.setIcon(new ImageIcon(Icons.class.getResource("door_in.png")));
         menuProxiesAdd.setIcon(new ImageIcon(Icons.class.getResource("computer_add.png")));
         menuProxiesRemove.setIcon(new ImageIcon(Icons.class.getResource("computer_delete.png")));
-        menuDropDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_delete.png")));
+        menuDropWorkload.setIcon(new ImageIcon(Icons.class.getResource("database_delete.png")));
+        menuCreateWorkload.setIcon(new ImageIcon(Icons.class.getResource("page_white_wrench_add.png")));
+        menuDropDatabase.setIcon(new ImageIcon(Icons.class.getResource("page_white_wrench_delete.png")));
         menuCreateDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_add.png")));
         menuCreateDatabaseSchema.setIcon(new ImageIcon(Icons.class.getResource("database_table.png")));
         menuLoadDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_lightning.png")));
@@ -265,14 +296,20 @@ public class MainForm extends JFrame {
         menuDropDatabase.setMnemonic('D');
         menuCreateDatabase.setMnemonic('C');
 
-        menuWorkload.setMnemonic('W');;
+        menuWorkload.setMnemonic('W');
+        menuCreateWorkload.setMnemonic('C');
+        menuDropWorkload.setMnemonic('D');
         menuCreateDatabaseSchema.setMnemonic('S');
         menuLoadDatabase.setMnemonic('L');
+
+        menuHelp.setMnemonic('H');
+        menuAbout.setMnemonic('A');
 
         menuBar.add(menuFile);
         menuBar.add(menuProxies);
         menuBar.add(menuDatabase);
         menuBar.add(menuWorkload);
+        menuBar.add(menuHelp);
     }
 
     private void eventsMenu() {
@@ -295,6 +332,20 @@ public class MainForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 end();
+            }
+        });
+        menuDropWorkload.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dropWorkload();
+            }
+        });
+        menuCreateWorkload.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createWorkload();
             }
         });
         menuDropDatabase.addActionListener(new ActionListener() {
@@ -341,6 +392,10 @@ public class MainForm extends JFrame {
         buttonDropDatabase.setToolTipText("Drop Database");
         buttonCreateDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_add.png")));
         buttonCreateDatabase.setToolTipText("Create Database");
+        buttonDropWorkload.setIcon(new ImageIcon(Icons.class.getResource("page_white_wrench_delete.png")));
+        buttonDropWorkload.setToolTipText("Drop Workload");
+        buttonCreateWorkload.setIcon(new ImageIcon(Icons.class.getResource("page_white_wrench_add.png")));
+        buttonCreateWorkload.setToolTipText("Create Workload");
         buttonCreateSchemaDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_table.png")));
         buttonCreateSchemaDatabase.setToolTipText("Create Database Schema");
         buttonLoadDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_lightning.png")));
@@ -349,6 +404,9 @@ public class MainForm extends JFrame {
         toolBar.addSeparator();
         toolBar.add(buttonAddProxy);
         toolBar.add(buttonRemoveProxy);
+        toolBar.addSeparator();
+        toolBar.add(buttonCreateWorkload);
+        toolBar.add(buttonDropWorkload);
         toolBar.addSeparator();
         toolBar.add(buttonCreateDatabase);
         toolBar.add(buttonDropDatabase);
@@ -395,6 +453,22 @@ public class MainForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 removeProxy();
+            }
+        });
+
+        buttonDropWorkload.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dropWorkload();
+            }
+        });
+
+        buttonCreateWorkload.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createWorkload();
             }
         });
 
@@ -568,6 +642,14 @@ public class MainForm extends JFrame {
             return;
         }
         JOptionPane.showMessageDialog(getRef(), "Select a proxy element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void dropWorkload() {
+        JOptionPane.showMessageDialog(getRef(), "TO DO", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void createWorkload() {
+        JOptionPane.showMessageDialog(getRef(), "TO DO", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void dropDatabase() {
