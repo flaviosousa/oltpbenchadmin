@@ -28,7 +28,7 @@ public class Listener extends Thread {
 
     @Override
     public void run() {
-        OutputMessage.printAction("OLTP-Proxy Listener is running on port " + serverPort);
+        OutputMessage.printAction("oltpbenchadmin listener is running on port " + serverPort);
         while (serverSocket != null && !serverSocket.isClosed()) {
             try {
                 Socket request = serverSocket.accept();

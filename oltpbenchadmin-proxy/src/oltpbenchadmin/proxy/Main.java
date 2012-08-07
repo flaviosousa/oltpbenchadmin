@@ -23,7 +23,7 @@ public class Main {
 
     public static void main(String[] args) {
         StringBuilder help = new StringBuilder();
-        help.append("Command: java -jar oltpbtool-proxy.jar <proxy port>");
+        help.append("Command: java -jar oltpbenchadmin-proxy.jar <proxy port>");
         if (args == null || args.length != 1) {
             help.append("\n");
             help.append("Invalid argument to <proxy port>");
@@ -57,7 +57,7 @@ public class Main {
 
         List<DBMS> dbmsList = new ArrayList<DBMS>();
 
-        File databaseSystemConfiguration = new File("oltpbtool-proxy.xml");
+        File databaseSystemConfiguration = new File("oltpbenchadmin-proxy.xml");
         if (!databaseSystemConfiguration.exists()) {
             try {
                 databaseSystemConfiguration.createNewFile();
@@ -78,11 +78,11 @@ public class Main {
                 writer.println("    </dbms>");
                 writer.println("</dbms_list>");
                 writer.close();
-                OutputMessage.printAction("ATTENTION: An example of the configuration file (oltpbtool-proxy.xml) was created. Please fill in the configuration file and start again oltpbtool-proxy. This is necessary so that you can manipulate the database through the grafical interface");
+                OutputMessage.printAction("ATTENTION: An example of the configuration file (oltpbenchadmin-proxy.xml) was created. Please fill in the configuration file and start again oltpbenchadmin-proxy. This is necessary so that you can manipulate the database through the grafical interface");
                 System.exit(0);
             } catch (IOException ex) {
                 help.append("\n");
-                help.append("Can not create the oltpbtool-proxy configuration file");
+                help.append("Can not create the oltpbenchadmin-proxy configuration file");
                 OutputMessage.printAction(help.toString());
                 System.exit(0);
             }
@@ -119,7 +119,7 @@ public class Main {
         }
 
         for (DBMS dbms : dbmsList) {
-            OutputMessage.printAction(dbms.toString() + " configuration has been loaded into oltpbtool-proxy");
+            OutputMessage.printAction(dbms.toString() + " configuration has been loaded into oltpbenchadmin-proxy");
         }
         
         try {
@@ -131,6 +131,6 @@ public class Main {
             OutputMessage.printAction(help.toString());
             System.exit(0);
         }
-        OutputMessage.printAction("The oltpbtool-proxy was initiated successfully");
+        OutputMessage.printAction("The oltpbenchadmin-proxy was initiated successfully");
     }
 }

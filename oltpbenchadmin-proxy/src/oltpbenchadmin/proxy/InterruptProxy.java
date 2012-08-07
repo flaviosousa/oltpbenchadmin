@@ -16,6 +16,6 @@ public class InterruptProxy extends Thread {
     @Override
     public void run() {
         System.out.println("");
-        OutputMessage.printAction("The oltpbtool-proxy was ended");
+        OutputMessage.printAction("The oltpbenchadmin-proxy was ended");
     }
 }
