@@ -344,13 +344,13 @@ public class WorkloadDescriptorForm extends JDialog {
                     SaveWorkloadDescriptorCommand command = new SaveWorkloadDescriptorCommand(workload);
                     Result result = proxyConnection.executeCommand(command);
                     if (result != null && result instanceof SaveWorkloadDescriptorResult && ((SaveWorkloadDescriptorResult) result).isSaved()) {
-                        JOptionPane.showMessageDialog(getRef(), "Workload Descriptor saved successfully", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(getRef(), "Workload Descriptor saved successfully", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                         end();
                         return;
                     }
                 }
                 mainForm.addLogError("Failed to save Workload Descriptor");
-                JOptionPane.showMessageDialog(getRef(), "Failed to save Workload Descriptor", "oltpbtool", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(getRef(), "Failed to save Workload Descriptor", "oltpbenchadmin", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
