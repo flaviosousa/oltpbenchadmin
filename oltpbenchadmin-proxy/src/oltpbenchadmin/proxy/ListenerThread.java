@@ -8,6 +8,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.List;
 import oltpbenchadmin.commons.DatabaseSystem;
+import oltpbenchadmin.commons.ExecuteConfiguration;
 import oltpbenchadmin.commons.Workload;
 import oltpbenchadmin.commons.commands.*;
 
@@ -50,6 +51,21 @@ public class ListenerThread extends Thread {
             try {
                 Command command = (Command) inputStream.readObject();
                 Result result = null;
+                if (command instanceof ExecuteCommand) {
+                    OutputMessage.printAction("[" + threadId + "]: Get a Execution Script - Starting...");
+                    ExecuteCommand executeCommand = (ExecuteCommand) command;
+                    ExecuteConfiguration executeConfiguration = (ExecuteConfiguration) executeCommand.getExecuteConfiguration();
+                    String strResult = BenchmarkOSCommand.executeDatabase(executeConfiguration.getWorkload(), executeConfiguration.getBenchmarkClass(), executeConfiguration.getSamplingWindow(), executeConfiguration.getOutputFile());
+                    String consoleResult = null;
+                    String errorMessage = null;
+                    if (strResult != null && !strResult.equalsIgnoreCase("error")) {
+                        consoleResult = "Execute Database \n" + strResult;
+                    } else {
+                        errorMessage = "Execute Database \n" + "ERROR";
+                    }
+                    result = new ExecuteResult(executeConfiguration, errorMessage, consoleResult);
+                    OutputMessage.printAction("[" + threadId + "]: Execution Script - Finished");
+                }
                 if (command instanceof GetWorkloadDescriptorsCommand) {
                     OutputMessage.printAction("[" + threadId + "]: Get a Workload Descriptor File - Starting...");
                     String consoleResult = null;
