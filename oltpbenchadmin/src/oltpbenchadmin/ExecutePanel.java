@@ -27,9 +27,11 @@ public class ExecutePanel extends JPanel {
     private JTextField samplingWindow;
     private JTextField outputFile;
     private List<ProxyConnection> proxyConnectionList;
+    private MainForm mainForm;
 
-    public ExecutePanel(String title, List<ProxyConnection> proxyConnectionList) {
+    public ExecutePanel(MainForm mainForm, String title, List<ProxyConnection> proxyConnectionList) {
         super(null);
+        this.mainForm = mainForm;
         this.title = title;
         this.proxyConnectionList = proxyConnectionList;
         proxy = new JComboBox();
@@ -172,5 +174,17 @@ public class ExecutePanel extends JPanel {
             return ec;
         }
         return null;
+    }
+
+    public boolean validateForm() {
+        if (samplingWindow.getText().trim().length() == 0 || !samplingWindow.getText().matches("[0-9]+")) {
+            JOptionPane.showMessageDialog(mainForm, "Sampling window is obligatory and should be a number", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        if (outputFile.getText().trim().length() == 0) {
+            JOptionPane.showMessageDialog(mainForm, "Output file is obligatory", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+        return true;
     }
 }
