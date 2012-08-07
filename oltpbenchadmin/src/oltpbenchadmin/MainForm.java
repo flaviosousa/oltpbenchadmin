@@ -23,7 +23,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.tree.*;
 import oltpbenchadmin.comm.ProxyConnection;
-import oltpbenchadmin.commons.Constants;
 import oltpbenchadmin.commons.Database;
 import oltpbenchadmin.commons.DatabaseSystem;
 import oltpbenchadmin.commons.ExecuteConfiguration;
@@ -102,7 +101,7 @@ public class MainForm extends JFrame {
     }
 
     private void buildFrame() {
-        setTitle("oltpbtool - A tool for OLTPBenchmark");
+        setTitle("oltpbenchadmin - A tool for OLTPBenchmark");
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -168,7 +167,7 @@ public class MainForm extends JFrame {
                     tabbedExecutes.addTab(executePanel.getTitle(), new ImageIcon(Icons.class.getResource("page_white_lightning.png")), executePanel);
                     executePanelList.add(executePanel);
                 } else {
-                    JOptionPane.showMessageDialog(getRef(), "There is no an active connection to a proxy", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "There is no an active connection to a proxy", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
@@ -189,10 +188,10 @@ public class MainForm extends JFrame {
                         }
                     }
                     if (success) {
-                        JOptionPane.showMessageDialog(getRef(), "Execute tab removed", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(getRef(), "Execute tab removed", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(getRef(), "Select a execute tab", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "Select a execute tab", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
@@ -202,7 +201,7 @@ public class MainForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (executePanelList.isEmpty()) {
-                    JOptionPane.showMessageDialog(getRef(), "There is no set script for execution", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "There is no set script for execution", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
                 List<ExecuteConfiguration> executeConfigurations = new ArrayList<ExecuteConfiguration>();
@@ -212,7 +211,7 @@ public class MainForm extends JFrame {
                     }
                 }
                 if (executeConfigurations.isEmpty()) {
-                    JOptionPane.showMessageDialog(getRef(), "There is no set script for execution", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "There is no set script for execution", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
                 boolean foundEquals = false;
@@ -229,7 +228,7 @@ public class MainForm extends JFrame {
                     }
                 }
                 if (foundEquals) {
-                    JOptionPane.showMessageDialog(getRef(), "There can not be run scripts for the same proxy", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "There can not be run scripts for the same proxy", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
                 for (ExecutePanel executePanel : executePanelList) {
@@ -373,7 +372,7 @@ public class MainForm extends JFrame {
                 loadingForm.close();
                 refreshAllProxyConnections();
                 addLog("oltp-proxy list was updated");
-                JOptionPane.showMessageDialog(getRef(), "oltp-proxy list was updated", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(getRef(), "oltp-proxy list was updated", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
             }
         });
         buttonExit.addActionListener(new ActionListener() {
@@ -525,7 +524,7 @@ public class MainForm extends JFrame {
     }
 
     public void end() {
-        if (JOptionPane.showConfirmDialog(this, "Are you sure you want to exit this application?", "oltpbtool", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if (JOptionPane.showConfirmDialog(this, "Are you sure you want to exit this application?", "oltpbenchadmin", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
     }
@@ -557,29 +556,29 @@ public class MainForm extends JFrame {
 
     private void removeProxy() {
         if (treeProxyBenchmarks.isSelectionEmpty()) {
-            JOptionPane.showMessageDialog(getRef(), "Select one tree element", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(getRef(), "Select one tree element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         TreePath path = treeProxyBenchmarks.getSelectionPath();
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
         if (selectedNode.getUserObject() instanceof ProxyConnection) {
-            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to remove this proxy?", "oltpbtool", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to remove this proxy?", "oltpbenchadmin", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 ((ProxyConnection) selectedNode.getUserObject()).close();
             }
             return;
         }
-        JOptionPane.showMessageDialog(getRef(), "Select a proxy element", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(getRef(), "Select a proxy element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void dropDatabase() {
         if (treeProxyBenchmarks.isSelectionEmpty()) {
-            JOptionPane.showMessageDialog(getRef(), "Select one tree element", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(getRef(), "Select one tree element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         TreePath path = treeProxyBenchmarks.getSelectionPath();
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
         if (selectedNode.getUserObject() instanceof Database) {
-            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this database?", "oltpbtool", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this database?", "oltpbenchadmin", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 DefaultMutableTreeNode proxyConnectionNode = (DefaultMutableTreeNode) selectedNode.getParent().getParent().getParent();
                 ProxyConnection proxyConnection = (ProxyConnection) proxyConnectionNode.getUserObject();
                 DropDatabaseCommand command = new DropDatabaseCommand((Database) selectedNode.getUserObject());
@@ -593,26 +592,26 @@ public class MainForm extends JFrame {
                 loadingForm.close();
                 if (result != null && result instanceof DropDatabaseResult && ((DropDatabaseResult) result).isSuccess()) {
                     addLog("Database successfully deleted");
-                    JOptionPane.showMessageDialog(getRef(), "Database successfully deleted", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "Database successfully deleted", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     addLogError("Failed to delete the database");
-                    JOptionPane.showMessageDialog(getRef(), "Failed to delete the database", "oltpbtool", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "Failed to delete the database", "oltpbenchadmin", JOptionPane.ERROR_MESSAGE);
                 }
             }
             return;
         }
-        JOptionPane.showMessageDialog(getRef(), "Select a database element", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(getRef(), "Select a database element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void createDatabase() {
         if (treeProxyBenchmarks.isSelectionEmpty()) {
-            JOptionPane.showMessageDialog(getRef(), "Select one tree element", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(getRef(), "Select one tree element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         TreePath path = treeProxyBenchmarks.getSelectionPath();
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
         if (selectedNode.getUserObject() instanceof DatabaseSystem) {
-            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to create a database?", "oltpbtool", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to create a database?", "oltpbenchadmin", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 DefaultMutableTreeNode proxyConnectionNode = (DefaultMutableTreeNode) selectedNode.getParent().getParent();
                 ProxyConnection proxyConnection = (ProxyConnection) proxyConnectionNode.getUserObject();
                 DatabaseSystem databaseSystem = (DatabaseSystem) selectedNode.getUserObject();
@@ -629,26 +628,26 @@ public class MainForm extends JFrame {
                 loadingForm.close();
                 if (result != null && result instanceof CreateDatabaseResult && ((CreateDatabaseResult) result).isSuccess()) {
                     addLog("Database successfully created");
-                    JOptionPane.showMessageDialog(getRef(), "Database successfully created", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "Database successfully created", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     addLogError("Failed to create the database");
-                    JOptionPane.showMessageDialog(getRef(), "Failed to create the database", "oltpbtool", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "Failed to create the database", "oltpbenchadmin", JOptionPane.ERROR_MESSAGE);
                 }
             }
             return;
         }
-        JOptionPane.showMessageDialog(getRef(), "Select a database system element", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(getRef(), "Select a database system element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void createDatabaseSchema() {
         if (treeProxyBenchmarks.isSelectionEmpty()) {
-            JOptionPane.showMessageDialog(getRef(), "Select one tree element", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(getRef(), "Select one tree element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         TreePath path = treeProxyBenchmarks.getSelectionPath();
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
         if (selectedNode.getUserObject() instanceof Workload) {
-            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to create database schema for this database?", "oltpbtool", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to create database schema for this database?", "oltpbenchadmin", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 DefaultMutableTreeNode proxyConnectionNode = (DefaultMutableTreeNode) selectedNode.getParent().getParent();
                 ProxyConnection proxyConnection = (ProxyConnection) proxyConnectionNode.getUserObject();
                 Workload workload = (Workload) selectedNode.getUserObject();
@@ -663,26 +662,26 @@ public class MainForm extends JFrame {
                 if (result != null && result instanceof CreateDatabaseSchemaResult && ((CreateDatabaseSchemaResult) result).isSuccess()) {
                     addLog(((CreateDatabaseSchemaResult) result).getConsoleMessage());
                     addLog("Database schema successfully created");
-                    JOptionPane.showMessageDialog(getRef(), "Database schema successfully created", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "Database schema successfully created", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     addLogError("Failed to create the database schema");
-                    JOptionPane.showMessageDialog(getRef(), "Failed to create the database schema", "oltpbtool", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "Failed to create the database schema", "oltpbenchadmin", JOptionPane.ERROR_MESSAGE);
                 }
             }
             return;
         }
-        JOptionPane.showMessageDialog(getRef(), "Select a workload descritor element", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(getRef(), "Select a workload descritor element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void loadDatabase() {
         if (treeProxyBenchmarks.isSelectionEmpty()) {
-            JOptionPane.showMessageDialog(getRef(), "Select one tree element", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(getRef(), "Select one tree element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         TreePath path = treeProxyBenchmarks.getSelectionPath();
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
         if (selectedNode.getUserObject() instanceof Workload) {
-            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to load data in this database?", "oltpbtool", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to load data in this database?", "oltpbenchadmin", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 DefaultMutableTreeNode proxyConnectionNode = (DefaultMutableTreeNode) selectedNode.getParent().getParent();
                 ProxyConnection proxyConnection = (ProxyConnection) proxyConnectionNode.getUserObject();
                 Workload workload = (Workload) selectedNode.getUserObject();
@@ -697,15 +696,15 @@ public class MainForm extends JFrame {
                 if (result != null && result instanceof LoadDatabaseResult && ((LoadDatabaseResult) result).isSuccess()) {
                     addLog(((LoadDatabaseResult) result).getConsoleMessage());
                     addLog("Database successfully loaded");
-                    JOptionPane.showMessageDialog(getRef(), "Database successfully loaded", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "Database successfully loaded", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     addLogError("Failed to load the database");
-                    JOptionPane.showMessageDialog(getRef(), "Failed to load the database", "oltpbtool", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), "Failed to load the database", "oltpbenchadmin", JOptionPane.ERROR_MESSAGE);
                 }
             }
             return;
         }
-        JOptionPane.showMessageDialog(getRef(), "Select a workload descritor element", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(getRef(), "Select a workload descritor element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public MainForm getRef() {
@@ -721,7 +720,7 @@ public class MainForm extends JFrame {
         }
         loadingForm.close();
         addLog("oltp-proxy is connected");
-        JOptionPane.showMessageDialog(getRef(), "oltp-proxy is connected", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(getRef(), "oltp-proxy is connected", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public synchronized void removeProxyConnection(ProxyConnection connection) {
@@ -733,7 +732,7 @@ public class MainForm extends JFrame {
         }
         loadingForm.close();
         addLog("oltp-proxy was disconnected and removed");
-        JOptionPane.showMessageDialog(getRef(), "oltp-proxy was disconnected and removed", "oltpbtool", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(getRef(), "oltp-proxy was disconnected and removed", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public synchronized void refreshAllProxyConnections() {

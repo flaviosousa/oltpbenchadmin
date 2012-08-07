@@ -144,7 +144,7 @@ public class BenchmarkProxyForm extends JDialog {
                     connection.start();
                 } catch (IOException ex) {
                     mainForm.addLogError(ex.getMessage());
-                    JOptionPane.showMessageDialog(getRef(), ex.getMessage(), "oltpbtool", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(getRef(), ex.getMessage(), "oltpbenchadmin", JOptionPane.ERROR_MESSAGE);
                     setVisible(true);
                 }
             }
