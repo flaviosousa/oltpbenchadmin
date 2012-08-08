@@ -256,8 +256,14 @@ public class MainForm extends JFrame {
                 for (ExecuteThread et : executeThreads) {
                     et.start();
                 }
+                LoadingForm loadingForm = new LoadingForm(getRef());
+                loadingForm.execute();
                 while (executeResults.size() < executeConfigurations.size());
-                addLog("The execution scritps were finalized. Total: " + executeResults.size());
+                loadingForm.close();
+                addLog("Database successfully deleted");
+                addLog("The execution scritps were finalized");
+                addLog("Total of execution scripts: " + executeResults.size());                
+                JOptionPane.showMessageDialog(getRef(), "Database successfully executed", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
