@@ -13,14 +13,19 @@ import oltpbenchadmin.commons.ExecuteConfiguration;
 public class ExecuteResult extends Result {
 
     private ExecuteConfiguration executeConfiguration;
+    private long executionTime;
 
-    public ExecuteResult(ExecuteConfiguration executeConfiguration, String errorMessage, String consoleMessage) {
+    public ExecuteResult(ExecuteConfiguration executeConfiguration, long executionTime, String errorMessage, String consoleMessage) {
         super(errorMessage, consoleMessage);
+        this.executionTime = executionTime;
         this.executeConfiguration = executeConfiguration;
     }
 
     public ExecuteConfiguration getExecuteConfiguration() {
         return executeConfiguration;
     }
-    
+
+    public long getExecutionTime() {
+        return executionTime;
+    }
 }
