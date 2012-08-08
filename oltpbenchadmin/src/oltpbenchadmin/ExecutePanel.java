@@ -135,11 +135,18 @@ public class ExecutePanel extends JPanel {
     }
 
     public void updateForm() {
+        execute.setSelected(true);
         proxy.removeAllItems();
+        while (proxy.getItemCount() > 0) {
+            proxy.removeItemAt(0);
+        }
         for (ProxyConnection pc : proxyConnectionList) {
             proxy.addItem(pc);
         }
         workload.removeAllItems();
+        while (workload.getItemCount() > 0) {
+            workload.removeItemAt(0);
+        }
         ProxyConnection pc = (ProxyConnection) proxy.getSelectedItem();
         for (Workload w : pc.getWorkloadList()) {
             workload.addItem(w);
@@ -154,7 +161,14 @@ public class ExecutePanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateForm();
+                workload.removeAllItems();
+                while (workload.getItemCount() > 0) {
+                    workload.removeItemAt(0);
+                }
+                ProxyConnection pc = (ProxyConnection) proxy.getSelectedItem();
+                for (Workload w : pc.getWorkloadList()) {
+                    workload.addItem(w);
+                }
             }
         });
     }
