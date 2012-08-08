@@ -52,10 +52,12 @@ public class ListenerThread extends Thread {
                 Command command = (Command) inputStream.readObject();
                 Result result = null;
                 if (command instanceof ExecuteCommand) {
-                    OutputMessage.printAction("[" + threadId + "]: Get a Execution Script - Starting...");
+                    OutputMessage.printAction("[" + threadId + "]: Execution Script - Starting...");
                     ExecuteCommand executeCommand = (ExecuteCommand) command;
                     ExecuteConfiguration executeConfiguration = (ExecuteConfiguration) executeCommand.getExecuteConfiguration();
+                    long startTime = System.currentTimeMillis();
                     String strResult = BenchmarkOSCommand.executeDatabase(executeConfiguration.getWorkload(), executeConfiguration.getBenchmarkClass(), executeConfiguration.getSamplingWindow(), executeConfiguration.getOutputFile());
+                    long endTime = System.currentTimeMillis();
                     String consoleResult = null;
                     String errorMessage = null;
                     if (strResult != null && !strResult.equalsIgnoreCase("error")) {
@@ -63,7 +65,7 @@ public class ListenerThread extends Thread {
                     } else {
                         errorMessage = "Execute Database \n" + "ERROR";
                     }
-                    result = new ExecuteResult(executeConfiguration, errorMessage, consoleResult);
+                    result = new ExecuteResult(executeConfiguration, (endTime - startTime), errorMessage, consoleResult);
                     OutputMessage.printAction("[" + threadId + "]: Execution Script - Finished");
                 }
                 if (command instanceof GetWorkloadDescriptorsCommand) {
