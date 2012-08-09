@@ -260,6 +260,9 @@ public class MainForm extends JFrame {
                 loadingForm.execute();
                 while (executeResults.size() < executeConfigurations.size());
                 loadingForm.close();
+                for (ExecutePanel ep : executePanelList) {
+                    ep.setVisibleDownloadResultFile();
+                }
                 addLog("Database successfully deleted");
                 addLog("The execution scritps were finalized");
                 addLog("Total of execution scripts: " + executeResults.size());                
