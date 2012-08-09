@@ -28,6 +28,7 @@ public class ExecutePanel extends JPanel {
     private JTextField outputFile;
     private List<ProxyConnection> proxyConnectionList;
     private MainForm mainForm;
+    private JButton downloadResultFile;
 
     public ExecutePanel(MainForm mainForm, String title, List<ProxyConnection> proxyConnectionList) {
         super(null);
@@ -40,6 +41,7 @@ public class ExecutePanel extends JPanel {
         workload = new JComboBox();
         samplingWindow = new JTextField();
         outputFile = new JTextField();
+        downloadResultFile = new JButton("Download Result File");
         build();
         events();
     }
@@ -128,6 +130,13 @@ public class ExecutePanel extends JPanel {
         outputFile.setLocation(150, y);
         add(outputFile);
 
+        y += 35;
+
+        downloadResultFile.setSize(300, 25);
+        downloadResultFile.setLocation(150, y);
+        downloadResultFile.setVisible(false);
+        add(downloadResultFile);
+
         for (String bc : Constants.BENCHMARK_CLASSES) {
             benchmarkClass.addItem(bc);
         }
@@ -135,6 +144,7 @@ public class ExecutePanel extends JPanel {
     }
 
     public void updateForm() {
+        downloadResultFile.setVisible(false);
         execute.setSelected(true);
         proxy.removeAllItems();
         while (proxy.getItemCount() > 0) {
@@ -171,6 +181,14 @@ public class ExecutePanel extends JPanel {
                 }
             }
         });
+
+        downloadResultFile.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
     }
 
     public String getTitle() {
@@ -178,6 +196,7 @@ public class ExecutePanel extends JPanel {
     }
 
     public ExecuteConfiguration getExecuteConfiguration() {
+        downloadResultFile.setVisible(false);
         if (execute.isSelected()) {
             ExecuteConfiguration ec = new ExecuteConfiguration();
             ec.setProxyConnectionString(((ProxyConnection) proxy.getSelectedItem()).toString());
@@ -191,6 +210,7 @@ public class ExecutePanel extends JPanel {
     }
 
     public boolean validateForm() {
+        downloadResultFile.setVisible(false);
         if (samplingWindow.getText().trim().length() == 0 || !samplingWindow.getText().matches("[0-9]+")) {
             JOptionPane.showMessageDialog(mainForm, "Sampling window is obligatory and should be a number", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
             return false;
@@ -200,5 +220,9 @@ public class ExecutePanel extends JPanel {
             return false;
         }
         return true;
+    }
+    
+    public void setVisibleDownloadResultFile() {
+        downloadResultFile.setVisible(true);
     }
 }
