@@ -68,6 +68,34 @@ public class ListenerThread extends Thread {
                     result = new ExecuteResult(executeConfiguration, (endTime - startTime), errorMessage, consoleResult);
                     OutputMessage.printAction("[" + threadId + "]: Execution Script - Finished");
                 }
+                if (command instanceof GetFileCommand) {
+                    OutputMessage.printAction("[" + threadId + "]: Get File - Starting...");
+                    GetFileCommand getFileCommand = (GetFileCommand) command;
+                    File file = new File(getFileCommand.getFilePath());
+                    byte[] fileContent = new byte[(int) file.length()];
+                    FileInputStream inputFile = new FileInputStream(file);
+                    inputFile.read(fileContent);
+                    inputFile.close();
+                    int c = 0;
+                    byte[] bufferBlock;
+                    int bufferLength = 1024;
+                    while (c < fileContent.length) {
+                        if (fileContent.length - c > bufferLength) {
+                            bufferBlock = new byte[bufferLength];
+                        } else {
+                            bufferBlock = new byte[fileContent.length - c];
+                        }
+                        for (int i = 0; i < bufferBlock.length; i++, c++) {
+                            bufferBlock[i] = fileContent[c];
+                        }
+                        outputStream.writeObject(bufferBlock);
+                        outputStream.flush();
+                    }
+                    String consoleResult = null;
+                    String errorMessage = "SUCCESS";
+                    result = new GetFileResult(errorMessage, consoleResult);
+                    OutputMessage.printAction("[" + threadId + "]: Get File - Finished");
+                }
                 if (command instanceof GetWorkloadDescriptorsCommand) {
                     OutputMessage.printAction("[" + threadId + "]: Get a Workload Descriptor File - Starting...");
                     String consoleResult = null;
