@@ -4,6 +4,7 @@
  */
 package oltpbenchadmin.comm;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -90,6 +91,28 @@ public class ProxyConnection extends Thread {
         return result;
     }
 
+    public synchronized ByteArrayOutputStream executeCommand(GetFileCommand command) {
+        ByteArrayOutputStream result = null;
+        try {
+            outputStream.writeObject(command);
+            outputStream.flush();
+            try {
+                Object received = inputStream.readObject();
+                while (received != null && received instanceof byte[]) {
+                    result.write((byte[]) received);
+                    received = inputStream.readObject();
+                }
+            } catch (ClassNotFoundException e) {
+                result = null;
+            }
+        } catch (IOException ex) {
+            result = null;
+        } finally {
+            
+        }
+        return result;
+    }
+
     public void close() {
         try {
             if (socket != null && !socket.isClosed()) {
@@ -127,7 +150,7 @@ public class ProxyConnection extends Thread {
     public List<DatabaseSystem> getDatabaseSystemList() {
         return databaseSystemList;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         return (host != null && obj instanceof ProxyConnection && host.equals(((ProxyConnection) obj).getHost()) && port == ((ProxyConnection) obj).getPort())

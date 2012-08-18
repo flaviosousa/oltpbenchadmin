@@ -6,12 +6,15 @@ package oltpbenchadmin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import javax.swing.*;
 import oltpbenchadmin.comm.ProxyConnection;
 import oltpbenchadmin.commons.Constants;
 import oltpbenchadmin.commons.ExecuteConfiguration;
 import oltpbenchadmin.commons.Workload;
+import oltpbenchadmin.commons.commands.GetFileCommand;
+import oltpbenchadmin.commons.commands.Result;
 
 /**
  *
@@ -158,8 +161,10 @@ public class ExecutePanel extends JPanel {
             workload.removeItemAt(0);
         }
         ProxyConnection pc = (ProxyConnection) proxy.getSelectedItem();
-        for (Workload w : pc.getWorkloadList()) {
-            workload.addItem(w);
+        if (pc != null && pc.getWorkloadList() != null) {
+            for (Workload w : pc.getWorkloadList()) {
+                workload.addItem(w);
+            }
         }
         benchmarkClass.setSelectedIndex(0);
         samplingWindow.setText("");
@@ -168,7 +173,6 @@ public class ExecutePanel extends JPanel {
 
     private void events() {
         proxy.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 workload.removeAllItems();
@@ -176,17 +180,20 @@ public class ExecutePanel extends JPanel {
                     workload.removeItemAt(0);
                 }
                 ProxyConnection pc = (ProxyConnection) proxy.getSelectedItem();
-                for (Workload w : pc.getWorkloadList()) {
-                    workload.addItem(w);
+                if (pc != null && pc.getWorkloadList() != null) {
+                    for (Workload w : pc.getWorkloadList()) {
+                        workload.addItem(w);
+                    }
                 }
             }
         });
 
         downloadResultFile.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                ProxyConnection pc = (ProxyConnection) proxy.getSelectedItem();
+                GetFileCommand getFileCommand = new GetFileCommand(outputFile.getText());
+                ByteArrayOutputStream result = pc.executeCommand(getFileCommand);
             }
         });
     }
@@ -221,7 +228,7 @@ public class ExecutePanel extends JPanel {
         }
         return true;
     }
-    
+
     public void setVisibleDownloadResultFile() {
         downloadResultFile.setVisible(true);
     }
