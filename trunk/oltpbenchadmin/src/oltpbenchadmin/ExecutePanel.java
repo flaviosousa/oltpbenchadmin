@@ -195,8 +195,11 @@ public class ExecutePanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 boolean success = true;
                 ProxyConnection pc = (ProxyConnection) proxy.getSelectedItem();
-                GetFileCommand getFileCommand = new GetFileCommand(outputFile.getText());
+                LoadingForm loadingForm = new LoadingForm(mainForm);
+                loadingForm.execute();
+                GetFileCommand getFileCommand = new GetFileCommand(outputFile.getText() + ".res");
                 ByteArrayOutputStream result = pc.executeCommand(getFileCommand);
+                loadingForm.close();
                 JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
                 int option = fileChooser.showSaveDialog(mainForm);
                 if (option == JFileChooser.APPROVE_OPTION) {

@@ -92,7 +92,7 @@ public class ProxyConnection extends Thread {
     }
 
     public synchronized ByteArrayOutputStream executeCommand(GetFileCommand command) {
-        ByteArrayOutputStream result = null;
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
         try {
             outputStream.writeObject(command);
             outputStream.flush();
@@ -104,11 +104,9 @@ public class ProxyConnection extends Thread {
                     received = inputStream.readObject();
                 }
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
                 result = null;
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
             result = null;
         } finally {
             
