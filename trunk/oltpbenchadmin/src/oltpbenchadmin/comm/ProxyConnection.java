@@ -100,12 +100,15 @@ public class ProxyConnection extends Thread {
                 Object received = inputStream.readObject();
                 while (received != null && received instanceof byte[]) {
                     result.write((byte[]) received);
+                    System.out.println("write " + ((byte[]) received).length);
                     received = inputStream.readObject();
                 }
             } catch (ClassNotFoundException e) {
+                e.printStackTrace();
                 result = null;
             }
         } catch (IOException ex) {
+            ex.printStackTrace();
             result = null;
         } finally {
             
