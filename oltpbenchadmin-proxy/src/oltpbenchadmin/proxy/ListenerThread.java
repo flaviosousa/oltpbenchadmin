@@ -71,7 +71,7 @@ public class ListenerThread extends Thread {
                 if (command instanceof GetFileCommand) {
                     OutputMessage.printAction("[" + threadId + "]: Get File - Starting...");
                     GetFileCommand getFileCommand = (GetFileCommand) command;
-                    File file = new File(getFileCommand.getFilePath());
+                    File file = new File(System.getProperty("user.dir") + System.getProperty("file.separator") + getFileCommand.getFilePath());
                     byte[] fileContent = new byte[(int) file.length()];
                     FileInputStream inputFile = new FileInputStream(file);
                     inputFile.read(fileContent);
@@ -88,7 +88,6 @@ public class ListenerThread extends Thread {
                         for (int i = 0; i < bufferBlock.length; i++, c++) {
                             bufferBlock[i] = fileContent[c];
                         }
-                        System.out.println("send " + bufferBlock.length);
                         outputStream.writeObject(bufferBlock);
                     }
                     String consoleResult = null;
