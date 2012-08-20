@@ -88,8 +88,8 @@ public class ListenerThread extends Thread {
                         for (int i = 0; i < bufferBlock.length; i++, c++) {
                             bufferBlock[i] = fileContent[c];
                         }
+                        System.out.println("send " + bufferBlock.length);
                         outputStream.writeObject(bufferBlock);
-                        outputStream.flush();
                     }
                     String consoleResult = null;
                     String errorMessage = "SUCCESS";
