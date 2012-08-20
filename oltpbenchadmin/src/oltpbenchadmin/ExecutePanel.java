@@ -7,6 +7,9 @@ package oltpbenchadmin;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import javax.swing.*;
 import oltpbenchadmin.comm.ProxyConnection;
@@ -14,7 +17,6 @@ import oltpbenchadmin.commons.Constants;
 import oltpbenchadmin.commons.ExecuteConfiguration;
 import oltpbenchadmin.commons.Workload;
 import oltpbenchadmin.commons.commands.GetFileCommand;
-import oltpbenchadmin.commons.commands.Result;
 
 /**
  *
@@ -191,13 +193,35 @@ public class ExecutePanel extends JPanel {
         downloadResultFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                boolean success = true;
                 ProxyConnection pc = (ProxyConnection) proxy.getSelectedItem();
                 GetFileCommand getFileCommand = new GetFileCommand(outputFile.getText());
                 ByteArrayOutputStream result = pc.executeCommand(getFileCommand);
+                JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+                int option = fileChooser.showSaveDialog(mainForm);
+                if (option == JFileChooser.APPROVE_OPTION) {
+                    if (fileChooser.getSelectedFile() != null) {
+                        File theFileToSave = fileChooser.getSelectedFile();
+                        try {
+                            FileOutputStream fileOutputStream = new FileOutputStream(theFileToSave);
+                            fileOutputStream.write(result.toByteArray());
+                            fileOutputStream.flush();
+                            fileOutputStream.close();
+                        } catch (IOException ex) {
+                            success = false;
+                        }
+                    }
+                }
+                if (success) {
+                    JOptionPane.showMessageDialog(mainForm, "File saved successfully", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(mainForm, "Unable to save the file. Try again.", "oltpbenchadmin", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
+    
     }
-
+    
     public String getTitle() {
         return title;
     }
