@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import oltpbenchadmin.commons.Database;
 import oltpbenchadmin.commons.DatabaseSystem;
+import oltpbenchadmin.commons.ResultFile;
 import oltpbenchadmin.commons.Workload;
 
 /**
@@ -217,7 +218,7 @@ public final class BenchmarkOSCommand {
         }
         return null;
     }
-    
+
     public static String executeDatabase(Workload workload, String benchmarkClass, long samplingWindow, String outputFile) {
         if (getOperationSystem() == LINUX) {
             String command = "java -Xmx1000m -cp " + getClassPath() + " -Dlog4j.configuration=log4j.properties com.oltpbenchmark.DBWorkload -b " + benchmarkClass + " -c " + workload.getFileAbsolutePath().substring(workload.getBenchmarkPath().length() + 1) + " --execute=true -s " + samplingWindow + " -o " + outputFile;
@@ -365,6 +366,36 @@ public final class BenchmarkOSCommand {
         } else {
             if (file.getAbsolutePath().contains(".") && file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(".")).equalsIgnoreCase(".xml")) {
                 fileXmlList.add(file.getAbsolutePath());
+            }
+        }
+    }
+
+    public static List<ResultFile> getResultFiles() {
+        List<ResultFile> resultFileList = new ArrayList<ResultFile>();
+        File benchmark = new File(System.getProperty("user.dir"));
+        List<String> fileResList = new ArrayList<String>();
+        getAllResFile(benchmark, fileResList);
+        for (String fileName : fileResList) {
+            ResultFile resultFile = new ResultFile(new File(fileName).getAbsolutePath(), benchmark.getAbsolutePath());
+            if (resultFile != null) {
+                resultFileList.add(resultFile);
+            }
+        }
+        return resultFileList;
+    }
+
+    private static void getAllResFile(File file, List<String> fileResList) {
+        if (file == null) {
+            return;
+        }
+        if (file.isDirectory()) {
+            File[] fileList = file.listFiles();
+            for (int i = 0; fileList != null && i < fileList.length; i++) {
+                getAllResFile(fileList[i], fileResList);
+            }
+        } else {
+            if (file.getAbsolutePath().contains(".") && file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(".")).equalsIgnoreCase(".res")) {
+                fileResList.add(file.getAbsolutePath());
             }
         }
     }

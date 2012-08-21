@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.List;
 import oltpbenchadmin.commons.DatabaseSystem;
 import oltpbenchadmin.commons.ExecuteConfiguration;
+import oltpbenchadmin.commons.ResultFile;
 import oltpbenchadmin.commons.Workload;
 import oltpbenchadmin.commons.commands.*;
 
@@ -110,6 +111,14 @@ public class ListenerThread extends Thread {
                     List<DatabaseSystem> resultList = BenchmarkOSCommand.getDatabaseSystems(dbmsList);
                     result = new GetDatabaseSystemsResult(resultList, errorMessage, consoleResult);
                     OutputMessage.printAction("[" + threadId + "]: Get a Database Systems List - Finished");
+                }
+                if (command instanceof GetResultFilesCommand) {
+                    OutputMessage.printAction("[" + threadId + "]: Get a Result Files List - Starting...");
+                    String consoleResult = null;
+                    String errorMessage = null;
+                    List<ResultFile> resultList = BenchmarkOSCommand.getResultFiles();
+                    result = new GetResultFilesResult(resultList, errorMessage, consoleResult);
+                    OutputMessage.printAction("[" + threadId + "]: Get a Result Files List - Finished");
                 }
                 if (command instanceof GetProxyStateCommand) {
                     result = new GetProxyStateResult(true, "", "");
