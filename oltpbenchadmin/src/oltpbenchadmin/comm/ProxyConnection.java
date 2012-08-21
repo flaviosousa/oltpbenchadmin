@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import oltpbenchadmin.MainForm;
 import oltpbenchadmin.commons.DatabaseSystem;
+import oltpbenchadmin.commons.ResultFile;
 import oltpbenchadmin.commons.Workload;
 import oltpbenchadmin.commons.commands.*;
 
@@ -29,6 +30,7 @@ public class ProxyConnection extends Thread {
     private ObjectInputStream inputStream;
     private MainForm mainForm;
     private List<Workload> workloadList;
+    private List<ResultFile> resultFileList;
     private List<DatabaseSystem> databaseSystemList;
 
     public ProxyConnection(String host, int port, MainForm mainForm) throws IOException {
@@ -41,6 +43,7 @@ public class ProxyConnection extends Thread {
         outputStream = new ObjectOutputStream(socket.getOutputStream());
         inputStream = new ObjectInputStream(socket.getInputStream());
         workloadList = new ArrayList<Workload>();
+        resultFileList = new ArrayList<ResultFile>();
         databaseSystemList = new ArrayList<DatabaseSystem>();
         updateProxy();
 
@@ -50,6 +53,10 @@ public class ProxyConnection extends Thread {
         Result workloadResult = executeCommand(new GetWorkloadDescriptorsCommand());
         if (workloadResult != null && workloadResult instanceof GetWorkloadDescriptorsResult && ((GetWorkloadDescriptorsResult) workloadResult).getWorkloadList() != null) {
             workloadList = ((GetWorkloadDescriptorsResult) workloadResult).getWorkloadList();
+        }
+        Result resultFileResult = executeCommand(new GetResultFilesCommand());
+        if (resultFileResult != null && resultFileResult instanceof GetResultFilesResult && ((GetResultFilesResult) resultFileResult).getResultFileList() != null) {
+            resultFileList = ((GetResultFilesResult) resultFileResult).getResultFileList();
         }
         Result databaseSystemResult = executeCommand(new GetDatabaseSystemsCommand());
         if (databaseSystemResult != null && databaseSystemResult instanceof GetDatabaseSystemsResult && ((GetDatabaseSystemsResult) databaseSystemResult).getDatabaseSystemList() != null) {
@@ -148,6 +155,10 @@ public class ProxyConnection extends Thread {
         return workloadList;
     }
 
+    public List<ResultFile> getResultFileList() {
+        return resultFileList;
+    }
+    
     public List<DatabaseSystem> getDatabaseSystemList() {
         return databaseSystemList;
     }

@@ -26,6 +26,7 @@ import oltpbenchadmin.comm.ProxyConnection;
 import oltpbenchadmin.commons.Database;
 import oltpbenchadmin.commons.DatabaseSystem;
 import oltpbenchadmin.commons.ExecuteConfiguration;
+import oltpbenchadmin.commons.ResultFile;
 import oltpbenchadmin.commons.Workload;
 import oltpbenchadmin.commons.commands.*;
 import oltpbenchadmin.icons.Icons;
@@ -38,7 +39,7 @@ public class MainForm extends JFrame {
 
     private JMenuBar menuBar;
     private JMenu menuFile, menuProxies, menuDatabase, menuWorkload, menuHelp;
-    private JMenuItem menuFileExit, menuProxiesAdd, menuProxiesRemove;
+    private JMenuItem menuFileDownload, menuFileExit, menuProxiesAdd, menuProxiesRemove;
     private JMenuItem menuCreateWorkload, menuDropWorkload;
     private JMenuItem menuCreateDatabase, menuDropDatabase;
     private JMenuItem menuCreateDatabaseSchema, menuLoadDatabase;
@@ -60,6 +61,7 @@ public class MainForm extends JFrame {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyy hh:mm:ss");
     private Style styleTime, styleText, styleErrorTime, styleErrorText;
     private JButton buttonAddExecute, buttonRemoveExecute, buttonExecuteAll;
+    private JButton buttonDownloadFile;
     private JTabbedPane tabbedExecutes;
     private List<ExecutePanel> executePanelList;
     private int tabId = 0;
@@ -69,6 +71,7 @@ public class MainForm extends JFrame {
         executePanelList = new ArrayList<ExecutePanel>();
         menuBar = new JMenuBar();
         menuFile = new JMenu("File");
+        menuFileDownload = new JMenuItem("Download File");
         menuFileExit = new JMenuItem("Exit");
         menuProxies = new JMenu("Proxies");
         menuProxiesAdd = new JMenuItem("Add Proxy");
@@ -107,6 +110,7 @@ public class MainForm extends JFrame {
         buttonAddExecute = new JButton("Add Execute");
         buttonRemoveExecute = new JButton("Remove Execute");
         buttonExecuteAll = new JButton("Execute All Checked");
+        buttonDownloadFile = new JButton();
         tabbedExecutes = new JTabbedPane();
     }
 
@@ -272,6 +276,8 @@ public class MainForm extends JFrame {
     }
 
     private void buildMenu() {
+        menuFile.add(menuFileDownload);
+        menuFile.addSeparator();
         menuFile.add(menuFileExit);
         menuProxies.add(menuProxiesAdd);
         menuProxies.add(menuProxiesRemove);
@@ -284,6 +290,7 @@ public class MainForm extends JFrame {
         menuWorkload.add(menuLoadDatabase);
         menuHelp.add(menuAbout);
 
+        menuFileDownload.setIcon(new ImageIcon(Icons.class.getResource("page_white_put.png")));
         menuFileExit.setIcon(new ImageIcon(Icons.class.getResource("door_in.png")));
         menuProxiesAdd.setIcon(new ImageIcon(Icons.class.getResource("computer_add.png")));
         menuProxiesRemove.setIcon(new ImageIcon(Icons.class.getResource("computer_delete.png")));
@@ -295,6 +302,7 @@ public class MainForm extends JFrame {
         menuLoadDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_lightning.png")));
 
         menuFile.setMnemonic('F');
+        menuFileDownload.setMnemonic('D');
         menuFileExit.setMnemonic('x');
 
         menuProxies.setMnemonic('P');
@@ -322,11 +330,18 @@ public class MainForm extends JFrame {
     }
 
     private void eventsMenu() {
-        menuFileExit.addActionListener(new ActionListener() {
+        menuFileDownload.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 end();
+            }
+        });
+        menuFileExit.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                downloadSelectedFile();
             }
         });
         menuProxiesAdd.addActionListener(new ActionListener() {
@@ -409,6 +424,8 @@ public class MainForm extends JFrame {
         buttonCreateSchemaDatabase.setToolTipText("Create Database Schema");
         buttonLoadDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_lightning.png")));
         buttonLoadDatabase.setToolTipText("Load Data in Database");
+        buttonDownloadFile.setIcon(new ImageIcon(Icons.class.getResource("page_white_put.png")));
+        buttonDownloadFile.setToolTipText("Download the Selected File");
         toolBar.add(buttonRefreshBenchmarkProxies);
         toolBar.addSeparator();
         toolBar.add(buttonAddProxy);
@@ -422,6 +439,8 @@ public class MainForm extends JFrame {
         toolBar.addSeparator();
         toolBar.add(buttonCreateSchemaDatabase);
         toolBar.add(buttonLoadDatabase);
+        toolBar.addSeparator();
+        toolBar.add(buttonDownloadFile);
         toolBar.addSeparator();
         toolBar.add(buttonExit);
     }
@@ -512,6 +531,14 @@ public class MainForm extends JFrame {
                 loadDatabase();
             }
         });
+        
+        buttonDownloadFile.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                downloadSelectedFile();
+            }
+        });
 
     }
 
@@ -551,6 +578,12 @@ public class MainForm extends JFrame {
                 }
                 if (userObject instanceof Database) {
                     l.setIcon(new ImageIcon(Icons.class.getResource("database.png")));
+                }
+                if (userObject instanceof String && userObject.toString().equalsIgnoreCase("result files")) {
+                    l.setIcon(new ImageIcon(Icons.class.getResource("folder_star.png")));
+                }
+                if (userObject instanceof ResultFile) {
+                    l.setIcon(new ImageIcon(Icons.class.getResource("page_white_star.png")));
                 }
                 return c;
             }
@@ -797,6 +830,15 @@ public class MainForm extends JFrame {
         }
         JOptionPane.showMessageDialog(getRef(), "Select a workload descritor element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
     }
+    
+    private void downloadSelectedFile() {
+        if (treeProxyBenchmarks.isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(getRef(), "Select a file", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        TreePath path = treeProxyBenchmarks.getSelectionPath();
+        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+    }
 
     public MainForm getRef() {
         return this;
@@ -833,12 +875,14 @@ public class MainForm extends JFrame {
         for (ProxyConnection proxyConnection : proxyConnectionList) {
             DefaultMutableTreeNode proxyNode = new DefaultMutableTreeNode(proxyConnection);
             rootNode.add(proxyNode);
+            
             DefaultMutableTreeNode workloadsNode = new DefaultMutableTreeNode("workloads");
             proxyNode.add(workloadsNode);
             for (Workload workload : proxyConnection.getWorkloadList()) {
                 DefaultMutableTreeNode workloadNode = new DefaultMutableTreeNode(workload);
                 workloadsNode.add(workloadNode);
             }
+            
             DefaultMutableTreeNode databaseSystemsNode = new DefaultMutableTreeNode("database systems");
             proxyNode.add(databaseSystemsNode);
             for (DatabaseSystem databaseSystem : proxyConnection.getDatabaseSystemList()) {
@@ -848,6 +892,13 @@ public class MainForm extends JFrame {
                     DefaultMutableTreeNode databaseNode = new DefaultMutableTreeNode(database);
                     databaseSystemNode.add(databaseNode);
                 }
+            }
+            
+            DefaultMutableTreeNode resultFilesNode = new DefaultMutableTreeNode("result files");
+            proxyNode.add(resultFilesNode);
+            for (ResultFile resultFile : proxyConnection.getResultFileList()) {
+                DefaultMutableTreeNode resultFileNode = new DefaultMutableTreeNode(resultFile);
+                resultFilesNode.add(resultFileNode);
             }
         }
         for (ExecutePanel executePanel : executePanelList) {
