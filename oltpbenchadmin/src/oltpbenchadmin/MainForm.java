@@ -10,6 +10,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -145,7 +149,6 @@ public class MainForm extends JFrame {
 
     private void eventsFrame() {
         addWindowListener(new WindowAdapter() {
-
             @Override
             public void windowClosing(WindowEvent e) {
                 end();
@@ -172,7 +175,6 @@ public class MainForm extends JFrame {
 
     private void eventsContent() {
         buttonAddExecute.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (proxyConnectionList.size() > 0) {
@@ -187,7 +189,6 @@ public class MainForm extends JFrame {
         });
 
         buttonRemoveExecute.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (tabbedExecutes.getSelectedComponent() != null) {
@@ -211,7 +212,6 @@ public class MainForm extends JFrame {
         });
 
         buttonExecuteAll.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (executePanelList.isEmpty()) {
@@ -269,7 +269,7 @@ public class MainForm extends JFrame {
                 }
                 addLog("Database successfully deleted");
                 addLog("The execution scritps were finalized");
-                addLog("Total of execution scripts: " + executeResults.size());                
+                addLog("Total of execution scripts: " + executeResults.size());
                 JOptionPane.showMessageDialog(getRef(), "Database successfully executed", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
             }
         });
@@ -331,70 +331,60 @@ public class MainForm extends JFrame {
 
     private void eventsMenu() {
         menuFileDownload.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 end();
             }
         });
         menuFileExit.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 downloadSelectedFile();
             }
         });
         menuProxiesAdd.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 end();
             }
         });
         menuProxiesRemove.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 end();
             }
         });
         menuDropWorkload.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 dropWorkload();
             }
         });
         menuCreateWorkload.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 createWorkload();
             }
         });
         menuDropDatabase.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 dropDatabase();
             }
         });
         menuCreateDatabase.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 createDatabase();
             }
         });
         menuCreateDatabaseSchema.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 createDatabaseSchema();
             }
         });
         menuLoadDatabase.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 loadDatabase();
@@ -447,7 +437,6 @@ public class MainForm extends JFrame {
 
     private void eventsToolBar() {
         buttonRefreshBenchmarkProxies.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 LoadingForm loadingForm = new LoadingForm(getRef());
@@ -462,14 +451,12 @@ public class MainForm extends JFrame {
             }
         });
         buttonExit.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 end();
             }
         });
         buttonAddProxy.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 addProxy();
@@ -477,7 +464,6 @@ public class MainForm extends JFrame {
         });
 
         buttonRemoveProxy.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 removeProxy();
@@ -485,7 +471,6 @@ public class MainForm extends JFrame {
         });
 
         buttonDropWorkload.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 dropWorkload();
@@ -493,7 +478,6 @@ public class MainForm extends JFrame {
         });
 
         buttonCreateWorkload.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 createWorkload();
@@ -501,7 +485,6 @@ public class MainForm extends JFrame {
         });
 
         buttonDropDatabase.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 dropDatabase();
@@ -509,7 +492,6 @@ public class MainForm extends JFrame {
         });
 
         buttonCreateDatabase.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 createDatabase();
@@ -517,7 +499,6 @@ public class MainForm extends JFrame {
         });
 
         buttonCreateSchemaDatabase.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 createDatabaseSchema();
@@ -525,15 +506,13 @@ public class MainForm extends JFrame {
         });
 
         buttonLoadDatabase.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 loadDatabase();
             }
         });
-        
-        buttonDownloadFile.addActionListener(new ActionListener() {
 
+        buttonDownloadFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 downloadSelectedFile();
@@ -548,7 +527,6 @@ public class MainForm extends JFrame {
 
     private void eventsTree() {
         treeProxyBenchmarks.setCellRenderer(new DefaultTreeCellRenderer() {
-
             @Override
             public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
                 Component c = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
@@ -589,7 +567,6 @@ public class MainForm extends JFrame {
             }
         });
         treeProxyBenchmarks.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
@@ -611,7 +588,6 @@ public class MainForm extends JFrame {
             }
         });
         treeProxyBenchmarks.addTreeSelectionListener(new TreeSelectionListener() {
-
             @Override
             public void valueChanged(TreeSelectionEvent event) {
                 if (treeProxyBenchmarks.isSelectionEmpty()) {
@@ -830,14 +806,52 @@ public class MainForm extends JFrame {
         }
         JOptionPane.showMessageDialog(getRef(), "Select a workload descritor element", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
     }
-    
+
     private void downloadSelectedFile() {
         if (treeProxyBenchmarks.isSelectionEmpty()) {
-            JOptionPane.showMessageDialog(getRef(), "Select a file", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(getRef(), "The selected item is not a valid file", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         TreePath path = treeProxyBenchmarks.getSelectionPath();
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+        if (selectedNode.getUserObject() instanceof Workload || selectedNode.getUserObject() instanceof ResultFile) {
+            DefaultMutableTreeNode proxyConnectionNode = (DefaultMutableTreeNode) selectedNode.getParent().getParent();
+            ProxyConnection proxyConnection = (ProxyConnection) proxyConnectionNode.getUserObject();
+            ByteArrayOutputStream arrayOutputStream = null;
+            if (selectedNode.getUserObject() instanceof Workload) {
+                Workload workload = (Workload) selectedNode.getUserObject();
+                GetFileCommand getFileCommand = new GetFileCommand(workload.toString().substring(1));
+                arrayOutputStream = proxyConnection.executeCommand(getFileCommand);
+            }
+            if (selectedNode.getUserObject() instanceof ResultFile) {
+                ResultFile resultFile = (ResultFile) selectedNode.getUserObject();
+                GetFileCommand getFileCommand = new GetFileCommand(resultFile.toString().substring(1));
+                arrayOutputStream = proxyConnection.executeCommand(getFileCommand);
+            }
+            boolean success = true;
+            JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+            int option = fileChooser.showSaveDialog(getRef());
+            if (option == JFileChooser.APPROVE_OPTION) {
+                if (fileChooser.getSelectedFile() != null) {
+                    File theFileToSave = fileChooser.getSelectedFile();
+                    try {
+                        FileOutputStream fileOutputStream = new FileOutputStream(theFileToSave);
+                        fileOutputStream.write(arrayOutputStream.toByteArray());
+                        fileOutputStream.flush();
+                        fileOutputStream.close();
+                    } catch (IOException ex) {
+                        success = false;
+                    }
+                }
+            }
+            if (success) {
+                JOptionPane.showMessageDialog(getRef(), "File saved successfully", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(getRef(), "Unable to save the file. Try again.", "oltpbenchadmin", JOptionPane.ERROR_MESSAGE);
+            }
+            return;
+        }
+        JOptionPane.showMessageDialog(getRef(), "The selected item is not a valid file", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public MainForm getRef() {
@@ -875,14 +889,14 @@ public class MainForm extends JFrame {
         for (ProxyConnection proxyConnection : proxyConnectionList) {
             DefaultMutableTreeNode proxyNode = new DefaultMutableTreeNode(proxyConnection);
             rootNode.add(proxyNode);
-            
+
             DefaultMutableTreeNode workloadsNode = new DefaultMutableTreeNode("workloads");
             proxyNode.add(workloadsNode);
             for (Workload workload : proxyConnection.getWorkloadList()) {
                 DefaultMutableTreeNode workloadNode = new DefaultMutableTreeNode(workload);
                 workloadsNode.add(workloadNode);
             }
-            
+
             DefaultMutableTreeNode databaseSystemsNode = new DefaultMutableTreeNode("database systems");
             proxyNode.add(databaseSystemsNode);
             for (DatabaseSystem databaseSystem : proxyConnection.getDatabaseSystemList()) {
@@ -893,7 +907,7 @@ public class MainForm extends JFrame {
                     databaseSystemNode.add(databaseNode);
                 }
             }
-            
+
             DefaultMutableTreeNode resultFilesNode = new DefaultMutableTreeNode("result files");
             proxyNode.add(resultFilesNode);
             for (ResultFile resultFile : proxyConnection.getResultFileList()) {
