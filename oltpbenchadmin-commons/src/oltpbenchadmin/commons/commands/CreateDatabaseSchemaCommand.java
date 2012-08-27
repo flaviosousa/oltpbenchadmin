@@ -14,14 +14,10 @@ public class CreateDatabaseSchemaCommand extends Command {
 
     private Workload workload;
     private String benchmarkClass;
-    private long samplingWindow;
-    private String outputFile;    
     
-    public CreateDatabaseSchemaCommand(Workload workload, String benchmarkClass, long samplingWindow, String outputFile) {
+    public CreateDatabaseSchemaCommand(Workload workload, String benchmarkClass) {
         this.workload = workload;
         this.benchmarkClass = benchmarkClass;
-        this.samplingWindow = samplingWindow;
-        this.outputFile = outputFile;        
     }
 
     public Workload getWorkload() {
@@ -30,14 +26,6 @@ public class CreateDatabaseSchemaCommand extends Command {
 
     public String getBenchmarkClass() {
         return benchmarkClass;
-    }
-
-    public String getOutputFile() {
-        return outputFile;
-    }
-
-    public long getSamplingWindow() {
-        return samplingWindow;
     }
     
 }
