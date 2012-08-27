@@ -149,7 +149,7 @@ public class ListenerThread extends Thread {
                 if (command instanceof CreateDatabaseSchemaCommand) {
                     OutputMessage.printAction("[" + threadId + "]: Create a Database Schema - Starting...");
                     CreateDatabaseSchemaCommand c = (CreateDatabaseSchemaCommand) command;
-                    String strResult = BenchmarkOSCommand.createDatabaseSchema(c.getWorkload(), c.getBenchmarkClass(), c.getSamplingWindow(), c.getOutputFile());
+                    String strResult = BenchmarkOSCommand.createDatabaseSchema(c.getWorkload(), c.getBenchmarkClass());
                     String consoleResult = null;
                     String errorMessage = null;
                     if (strResult != null && !strResult.equalsIgnoreCase("error")) {
@@ -157,13 +157,13 @@ public class ListenerThread extends Thread {
                     } else {
                         errorMessage = "Create Database Schema\n" + "ERROR";
                     }
-                    result = new CreateDatabaseSchemaResult(c.getWorkload(), c.getBenchmarkClass(), c.getSamplingWindow(), c.getOutputFile(), errorMessage, consoleResult);
+                    result = new CreateDatabaseSchemaResult(c.getWorkload(), c.getBenchmarkClass(), errorMessage, consoleResult);
                     OutputMessage.printAction("[" + threadId + "]: Create a Database Schema - Finished");
                 }
                 if (command instanceof LoadDatabaseCommand) {
                     OutputMessage.printAction("[" + threadId + "]: Load Data in Database - Starting...");
                     LoadDatabaseCommand c = (LoadDatabaseCommand) command;
-                    String strResult = BenchmarkOSCommand.loadDatabase(c.getWorkload(), c.getBenchmarkClass(), c.getSamplingWindow(), c.getOutputFile());
+                    String strResult = BenchmarkOSCommand.loadDatabase(c.getWorkload(), c.getBenchmarkClass());
                     String consoleResult = null;
                     String errorMessage = null;
                     if (strResult != null && !strResult.equalsIgnoreCase("error")) {
@@ -171,7 +171,7 @@ public class ListenerThread extends Thread {
                     } else {
                         errorMessage = "Load Database Data\n" + "ERROR";
                     }
-                    result = new LoadDatabaseResult(c.getWorkload(), c.getBenchmarkClass(), c.getSamplingWindow(), c.getOutputFile(), errorMessage, consoleResult);
+                    result = new LoadDatabaseResult(c.getWorkload(), c.getBenchmarkClass(), errorMessage, consoleResult);
                     OutputMessage.printAction("[" + threadId + "]: Load Data in Database - Finished");
                 }
                 if (command instanceof DropDatabaseCommand) {
