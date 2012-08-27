@@ -14,15 +14,11 @@ public class LoadDatabaseResult extends Result {
 
     private Workload workload;
     private String benchmarkClass;
-    private long samplingWindow;
-    private String outputFile;
 
-    public LoadDatabaseResult(Workload workload, String benchmarkClass, long samplingWindow, String outputFile, String errorMessage, String consoleMessage) {
+    public LoadDatabaseResult(Workload workload, String benchmarkClass, String errorMessage, String consoleMessage) {
         super(errorMessage, consoleMessage);
         this.workload = workload;
         this.benchmarkClass = benchmarkClass;
-        this.samplingWindow = samplingWindow;
-        this.outputFile = outputFile;
     }
 
     public Workload getWorkload() {
@@ -31,14 +27,6 @@ public class LoadDatabaseResult extends Result {
 
     public String getBenchmarkClass() {
         return benchmarkClass;
-    }
-
-    public String getOutputFile() {
-        return outputFile;
-    }
-
-    public long getSamplingWindow() {
-        return samplingWindow;
     }
 
 }

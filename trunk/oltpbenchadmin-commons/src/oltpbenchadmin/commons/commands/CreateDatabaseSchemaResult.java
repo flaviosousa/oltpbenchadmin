@@ -14,15 +14,11 @@ public class CreateDatabaseSchemaResult extends Result {
 
     private Workload workload;
     private String benchmarkClass;
-    private long samplingWindow;
-    private String outputFile;
     
-    public CreateDatabaseSchemaResult(Workload workload, String benchmarkClass, long samplingWindow, String outputFile, String errorMessage, String consoleMessage) {
+    public CreateDatabaseSchemaResult(Workload workload, String benchmarkClass, String errorMessage, String consoleMessage) {
         super(errorMessage, consoleMessage);
         this.workload = workload;
         this.benchmarkClass = benchmarkClass;
-        this.samplingWindow = samplingWindow;
-        this.outputFile = outputFile;          
     }
     
     public Workload getWorkload() {
@@ -33,12 +29,4 @@ public class CreateDatabaseSchemaResult extends Result {
         return benchmarkClass;
     }
 
-    public String getOutputFile() {
-        return outputFile;
-    }
-
-    public long getSamplingWindow() {
-        return samplingWindow;
-    }
-    
 }

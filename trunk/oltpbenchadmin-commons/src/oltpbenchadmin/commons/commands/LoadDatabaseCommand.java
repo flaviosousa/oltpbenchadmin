@@ -14,14 +14,10 @@ public class LoadDatabaseCommand extends Command {
 
     private Workload workload;
     private String benchmarkClass;
-    private long samplingWindow;
-    private String outputFile;
     
-    public LoadDatabaseCommand(Workload workload, String benchmarkClass, long samplingWindow, String outputFile) {
+    public LoadDatabaseCommand(Workload workload, String benchmarkClass) {
         this.workload = workload;
         this.benchmarkClass = benchmarkClass;
-        this.samplingWindow = samplingWindow;
-        this.outputFile = outputFile;
     }
 
     public Workload getWorkload() {
@@ -32,12 +28,4 @@ public class LoadDatabaseCommand extends Command {
         return benchmarkClass;
     }
 
-    public String getOutputFile() {
-        return outputFile;
-    }
-
-    public long getSamplingWindow() {
-        return samplingWindow;
-    }
-    
 }
