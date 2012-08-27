@@ -46,7 +46,6 @@ public class MainForm extends JFrame {
     private JMenuItem menuFileDownload, menuFileExit, menuProxiesAdd, menuProxiesRemove;
     private JMenuItem menuCreateWorkload, menuDropWorkload;
     private JMenuItem menuCreateDatabase, menuDropDatabase;
-    private JMenuItem menuCreateDatabaseSchema, menuLoadDatabase;
     private JMenuItem menuAbout;
     private JToolBar toolBar;
     private JButton buttonRefreshBenchmarkProxies;
@@ -86,8 +85,6 @@ public class MainForm extends JFrame {
         menuWorkload = new JMenu("Workload");
         menuDropWorkload = new JMenuItem("Drop Workload");
         menuCreateWorkload = new JMenuItem("Create Workload");
-        menuCreateDatabaseSchema = new JMenuItem("Create Database Schema");
-        menuLoadDatabase = new JMenuItem("Load Data in Database");
         menuHelp = new JMenu("Help");
         menuAbout = new JMenuItem("About");
         toolBar = new JToolBar();
@@ -111,9 +108,9 @@ public class MainForm extends JFrame {
         buttonCreateDatabase = new JButton();
         buttonCreateSchemaDatabase = new JButton();
         buttonLoadDatabase = new JButton();
-        buttonAddExecute = new JButton("Add Execute");
-        buttonRemoveExecute = new JButton("Remove Execute");
-        buttonExecuteAll = new JButton("Execute All Checked");
+        buttonAddExecute = new JButton();
+        buttonRemoveExecute = new JButton();
+        buttonExecuteAll = new JButton();
         buttonDownloadFile = new JButton();
         tabbedExecutes = new JTabbedPane();
     }
@@ -157,11 +154,27 @@ public class MainForm extends JFrame {
     }
 
     private void buildContent() {
+        buttonCreateSchemaDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_table.png")));
+        buttonCreateSchemaDatabase.setText("Create Database Schema");
+        buttonCreateSchemaDatabase.setToolTipText("Create Database Schema");
+        buttonLoadDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_lightning.png")));
+        buttonLoadDatabase.setText("Load Data in Database");
+        buttonLoadDatabase.setToolTipText("Load Data in Database");
+
         buttonAddExecute.setIcon(new ImageIcon(Icons.class.getResource("add.png")));
+        buttonAddExecute.setText("Add Execute");
+        buttonAddExecute.setToolTipText("Add Execute");
         buttonRemoveExecute.setIcon(new ImageIcon(Icons.class.getResource("delete.png")));
+        buttonRemoveExecute.setText("Remove Execute");
+        buttonRemoveExecute.setToolTipText("Remove Execute");
         buttonExecuteAll.setIcon(new ImageIcon(Icons.class.getResource("lightning.png")));
+        buttonExecuteAll.setText("Execute All Checked");
+        buttonExecuteAll.setToolTipText("Execute All Checked");
 
         JPanel panelContentTop = new JPanel(new FlowLayout());
+        panelContentTop.add(buttonCreateSchemaDatabase);
+        panelContentTop.add(buttonLoadDatabase);
+        panelContentTop.add(buttonAddExecute);
         panelContentTop.add(buttonAddExecute);
         panelContentTop.add(buttonRemoveExecute);
 
@@ -284,10 +297,7 @@ public class MainForm extends JFrame {
         menuDatabase.add(menuCreateDatabase);
         menuDatabase.add(menuDropDatabase);
         menuWorkload.add(menuCreateWorkload);
-        menuWorkload.add(menuDropDatabase);
-        menuWorkload.addSeparator();
-        menuWorkload.add(menuCreateDatabaseSchema);
-        menuWorkload.add(menuLoadDatabase);
+        menuWorkload.add(menuDropWorkload);
         menuHelp.add(menuAbout);
 
         menuFileDownload.setIcon(new ImageIcon(Icons.class.getResource("page_white_put.png")));
@@ -298,8 +308,6 @@ public class MainForm extends JFrame {
         menuCreateWorkload.setIcon(new ImageIcon(Icons.class.getResource("page_white_wrench_add.png")));
         menuDropDatabase.setIcon(new ImageIcon(Icons.class.getResource("page_white_wrench_delete.png")));
         menuCreateDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_add.png")));
-        menuCreateDatabaseSchema.setIcon(new ImageIcon(Icons.class.getResource("database_table.png")));
-        menuLoadDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_lightning.png")));
 
         menuFile.setMnemonic('F');
         menuFileDownload.setMnemonic('D');
@@ -316,8 +324,6 @@ public class MainForm extends JFrame {
         menuWorkload.setMnemonic('W');
         menuCreateWorkload.setMnemonic('C');
         menuDropWorkload.setMnemonic('D');
-        menuCreateDatabaseSchema.setMnemonic('S');
-        menuLoadDatabase.setMnemonic('L');
 
         menuHelp.setMnemonic('H');
         menuAbout.setMnemonic('A');
@@ -378,16 +384,10 @@ public class MainForm extends JFrame {
                 createDatabase();
             }
         });
-        menuCreateDatabaseSchema.addActionListener(new ActionListener() {
+        menuAbout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                createDatabaseSchema();
-            }
-        });
-        menuLoadDatabase.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                loadDatabase();
+                about();
             }
         });
     }
@@ -410,10 +410,6 @@ public class MainForm extends JFrame {
         buttonDropWorkload.setToolTipText("Drop Workload");
         buttonCreateWorkload.setIcon(new ImageIcon(Icons.class.getResource("page_white_wrench_add.png")));
         buttonCreateWorkload.setToolTipText("Create Workload");
-        buttonCreateSchemaDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_table.png")));
-        buttonCreateSchemaDatabase.setToolTipText("Create Database Schema");
-        buttonLoadDatabase.setIcon(new ImageIcon(Icons.class.getResource("database_lightning.png")));
-        buttonLoadDatabase.setToolTipText("Load Data in Database");
         buttonDownloadFile.setIcon(new ImageIcon(Icons.class.getResource("page_white_put.png")));
         buttonDownloadFile.setToolTipText("Download the Selected File");
         toolBar.add(buttonRefreshBenchmarkProxies);
@@ -426,11 +422,8 @@ public class MainForm extends JFrame {
         toolBar.addSeparator();
         toolBar.add(buttonCreateDatabase);
         toolBar.add(buttonDropDatabase);
-        toolBar.addSeparator();
-        toolBar.add(buttonCreateSchemaDatabase);
-        toolBar.add(buttonLoadDatabase);
-        toolBar.addSeparator();
-        toolBar.add(buttonDownloadFile);
+        //toolBar.addSeparator();
+        //toolBar.add(buttonDownloadFile);
         toolBar.addSeparator();
         toolBar.add(buttonExit);
     }
@@ -752,9 +745,7 @@ public class MainForm extends JFrame {
                 ProxyConnection proxyConnection = (ProxyConnection) proxyConnectionNode.getUserObject();
                 Workload workload = (Workload) selectedNode.getUserObject();
                 String benchmarkClass = JOptionPane.showInputDialog(getRef(), "Benchmark class: ");
-                long samplingWindow = Long.parseLong(JOptionPane.showInputDialog(getRef(), "Sampling window: "));
-                String outputFile = JOptionPane.showInputDialog(getRef(), "Output file: ");
-                CreateDatabaseSchemaCommand command = new CreateDatabaseSchemaCommand(workload, benchmarkClass, samplingWindow, outputFile);
+                CreateDatabaseSchemaCommand command = new CreateDatabaseSchemaCommand(workload, benchmarkClass);
                 LoadingForm loadingForm = new LoadingForm(getRef());
                 loadingForm.execute();
                 Result result = proxyConnection.executeCommand(command);
@@ -786,9 +777,7 @@ public class MainForm extends JFrame {
                 ProxyConnection proxyConnection = (ProxyConnection) proxyConnectionNode.getUserObject();
                 Workload workload = (Workload) selectedNode.getUserObject();
                 String benchmarkClass = JOptionPane.showInputDialog(getRef(), "Benchmark class: ");
-                long samplingWindow = Long.parseLong(JOptionPane.showInputDialog(getRef(), "Sampling window: "));
-                String outputFile = JOptionPane.showInputDialog(getRef(), "Output file: ");
-                LoadDatabaseCommand command = new LoadDatabaseCommand(workload, benchmarkClass, samplingWindow, outputFile);
+                LoadDatabaseCommand command = new LoadDatabaseCommand(workload, benchmarkClass);
                 LoadingForm loadingForm = new LoadingForm(getRef());
                 loadingForm.execute();
                 Result result = proxyConnection.executeCommand(command);
@@ -854,6 +843,11 @@ public class MainForm extends JFrame {
         JOptionPane.showMessageDialog(getRef(), "The selected item is not a valid file", "oltpbenchadmin", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public void about() {
+        AboutForm aboutForm = new AboutForm(getRef());
+        aboutForm.execute();
+    }
+    
     public MainForm getRef() {
         return this;
     }
