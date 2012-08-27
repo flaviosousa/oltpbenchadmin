@@ -201,18 +201,18 @@ public final class BenchmarkOSCommand {
         return result;
     }
 
-    public static String createDatabaseSchema(Workload workload, String benchmarkClass, long samplingWindow, String outputFile) {
+    public static String createDatabaseSchema(Workload workload, String benchmarkClass) {
         if (getOperationSystem() == LINUX) {
-            String command = "java -Xmx1000m -cp " + getClassPath() + " -Dlog4j.configuration=log4j.properties com.oltpbenchmark.DBWorkload -b " + benchmarkClass + " -c " + workload.getFileAbsolutePath().substring(workload.getBenchmarkPath().length() + 1) + " --create=true -s " + samplingWindow + " -o " + outputFile;
+            String command = "java -Xmx1000m -cp " + getClassPath() + " -Dlog4j.configuration=log4j.properties com.oltpbenchmark.DBWorkload -b " + benchmarkClass + " -c " + workload.getFileAbsolutePath().substring(workload.getBenchmarkPath().length() + 1) + " --create=true";
             String result = executeProcess(command);
             return result;
         }
         return null;
     }
 
-    public static String loadDatabase(Workload workload, String benchmarkClass, long samplingWindow, String outputFile) {
+    public static String loadDatabase(Workload workload, String benchmarkClass) {
         if (getOperationSystem() == LINUX) {
-            String command = "java -Xmx1000m -cp " + getClassPath() + " -Dlog4j.configuration=log4j.properties com.oltpbenchmark.DBWorkload -b " + benchmarkClass + " -c " + workload.getFileAbsolutePath().substring(workload.getBenchmarkPath().length() + 1) + " --load=true -s " + samplingWindow + " -o " + outputFile;
+            String command = "java -Xmx1000m -cp " + getClassPath() + " -Dlog4j.configuration=log4j.properties com.oltpbenchmark.DBWorkload -b " + benchmarkClass + " -c " + workload.getFileAbsolutePath().substring(workload.getBenchmarkPath().length() + 1) + " --load=true";
             String result = executeProcess(command);
             return result;
         }
