@@ -57,61 +57,42 @@ public class BenchmarkProxyForm extends JDialog {
         JLabel labelTemp;
         labelTemp = new JLabel("Benchmark Proxy Configuration: ");
 
-        labelTemp.setOpaque(
-                true);
-        labelTemp.setSize(
-                300, 25);
-        labelTemp.setLocation(
-                10, y);
+        labelTemp.setOpaque(true);
+        labelTemp.setSize(300, 25);
+        labelTemp.setLocation(10, y);
         panelMain.add(labelTemp);
         y += 30;
         labelTemp = new JLabel("Host: ");
 
-        labelTemp.setOpaque(
-                true);
-        labelTemp.setSize(
-                100, 25);
-        labelTemp.setLocation(
-                10, y);
+        labelTemp.setOpaque(true);
+        labelTemp.setSize(100, 25);
+        labelTemp.setLocation(10, y);
         panelMain.add(labelTemp);
 
-        host.setSize(
-                300, 25);
-        host.setLocation(
-                120, y);
+        host.setSize(300, 25);
+        host.setLocation(120, y);
         panelMain.add(host);
         y += 30;
         labelTemp = new JLabel("Port: ");
 
-        labelTemp.setOpaque(
-                true);
-        labelTemp.setSize(
-                100, 25);
-        labelTemp.setLocation(
-                10, y);
+        labelTemp.setOpaque(true);
+        labelTemp.setSize(100, 25);
+        labelTemp.setLocation(10, y);
         panelMain.add(labelTemp);
 
-        port.setSize(
-                100, 25);
-        port.setLocation(
-                120, y);
+        port.setSize(100, 25);
+        port.setLocation(120, y);
         panelMain.add(port);
         y += 30;
 
-        connect.setSize(
-                110, 30);
-        connect.setLocation(
-                190, y + 20);
-        connect.setIcon(
-                new ImageIcon(Icons.class.getResource("connect.png")));
+        connect.setSize(110, 30);
+        connect.setLocation(190, y + 20);
+        connect.setIcon(new ImageIcon(Icons.class.getResource("connect.png")));
         panelMain.add(connect);
 
-        cancel.setSize(
-                110, 30);
-        cancel.setLocation(
-                310, y + 20);
-        cancel.setIcon(
-                new ImageIcon(Icons.class.getResource("cancel.png")));
+        cancel.setSize(110, 30);
+        cancel.setLocation(310, y + 20);
+        cancel.setIcon(new ImageIcon(Icons.class.getResource("cancel.png")));
         panelMain.add(cancel);
 
         add(panelMain);
@@ -119,7 +100,6 @@ public class BenchmarkProxyForm extends JDialog {
 
     private void events() {
         addWindowListener(new WindowAdapter() {
-
             @Override
             public void windowClosing(WindowEvent e) {
                 end();
@@ -127,14 +107,12 @@ public class BenchmarkProxyForm extends JDialog {
         });
 
         cancel.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 end();
             }
         });
         connect.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
