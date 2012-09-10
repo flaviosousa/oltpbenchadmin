@@ -2,14 +2,8 @@
 
 =Installing the oltpbenchadmin=
 
-The oltpbenchadmin's tool has two software components. The first component, called of oltpbenchmark, is a graphical interface to control the experiment's environment. The second component, called of oltpbenchmark-proxy, is a proxy that interacts with an installation of the oltpbenchmark.
-
-==Installing oltpbenchadmin (the graphical interface)==
-
-  # Download the file *oltpbenchadmin.zip*
-  # Unzip the file *oltpbenchadmin.zip* preserving their directory structure
-  # Open your terminal command line and enter the root directory of the unzipped file
-  # Use the command `java -jar oltpbenchmark.jar` to run the graphical interface of the oltpbenchadmin
+The oltpbenchadmin's tool has two software components: (i)  oltpbenchmark-proxy is a proxy that interacts with the oltpbenchmark 
+(ii) oltpbenchmark is a graphical interface to control the experiment's environment. 
 
 ==Installing oltpbenchadmin-proxy (the proxy)==
 
@@ -18,3 +12,10 @@ The oltpbenchadmin's tool has two software components. The first component, call
   # Open your terminal command line and enter the root directory of the unzipped file
   # Run the file *oltpbechmark-proxy.sh* to install the required components. To run the file *oltpbenchadmin-proxy.sh*, you must use the following command syntax `./oltpbenchmark-proxy.sh <root directory of the oltpbenchmark>`
     * Do not forget to check if the root directory of the oltpbenchmark has write permission and that the file *oltpbenchmark-proxy.sh* has execute permission
+
+==Installing oltpbenchadmin (the graphical interface)==
+
+  # Download the file *oltpbenchadmin.zip*
+  # Unzip the file *oltpbenchadmin.zip* preserving their directory structure
+  # Open your terminal command line and enter the root directory of the unzipped file
+  # Use the command `java -jar oltpbenchmark.jar` to run the graphical interface of the oltpbenchadmin
