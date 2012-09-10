@@ -7,15 +7,15 @@ The oltpbenchadmin's tool has two software components: (i)  oltpbenchmark-proxy 
 
 ==Installing oltpbenchadmin-proxy (the proxy)==
 
-  # Download the file *oltpbenchadmin-proxy.zip*
-  # Unzip the file *oltpbenchadmin-proxy.zip* preserving their directory structure
+  # Download the file [http://oltpbenchadmin.googlecode.com/files/oltpbenchadmin-proxy_v0.1.zip oltpbenchadmin-proxy.zip]
+  # Unzip the file [http://oltpbenchadmin.googlecode.com/files/oltpbenchadmin-proxy_v0.1.zip oltpbenchadmin-proxy.zip] preserving their directory structure
   # Open your terminal command line and enter the root directory of the unzipped file
   # Run the file *oltpbechmark-proxy.sh* to install the required components. To run the file *oltpbenchadmin-proxy.sh*, you must use the following command syntax `./oltpbenchmark-proxy.sh <root directory of the oltpbenchmark>`
     * Do not forget to check if the root directory of the oltpbenchmark has write permission and that the file *oltpbenchmark-proxy.sh* has execute permission
 
 ==Installing oltpbenchadmin (the graphical interface)==
 
-  # Download the file *oltpbenchadmin.zip*
-  # Unzip the file *oltpbenchadmin.zip* preserving their directory structure
+  # Download the file [http://oltpbenchadmin.googlecode.com/files/oltpbenchadmin_v0.1.zip oltpbenchadmin.zip]
+  # Unzip the file [http://oltpbenchadmin.googlecode.com/files/oltpbenchadmin_v0.1.zip oltpbenchadmin.zip] preserving their directory structure
   # Open your terminal command line and enter the root directory of the unzipped file
   # Use the command `java -jar oltpbenchmark.jar` to run the graphical interface of the oltpbenchadmin
