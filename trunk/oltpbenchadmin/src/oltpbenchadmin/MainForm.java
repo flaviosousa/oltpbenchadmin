@@ -296,8 +296,8 @@ public class MainForm extends JFrame {
         menuProxies.add(menuProxiesRemove);
         menuDatabase.add(menuCreateDatabase);
         menuDatabase.add(menuDropDatabase);
-        menuWorkload.add(menuCreateWorkload);
-        menuWorkload.add(menuDropWorkload);
+        //menuWorkload.add(menuCreateWorkload);
+        //menuWorkload.add(menuDropWorkload);
         menuHelp.add(menuAbout);
 
         menuFileDownload.setIcon(new ImageIcon(Icons.class.getResource("page_white_put.png")));
@@ -331,7 +331,7 @@ public class MainForm extends JFrame {
         menuBar.add(menuFile);
         menuBar.add(menuProxies);
         menuBar.add(menuDatabase);
-        menuBar.add(menuWorkload);
+        //menuBar.add(menuWorkload);
         menuBar.add(menuHelp);
     }
 
@@ -339,25 +339,25 @@ public class MainForm extends JFrame {
         menuFileDownload.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                end();
+                downloadSelectedFile();
             }
         });
         menuFileExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                downloadSelectedFile();
+                end();
             }
         });
         menuProxiesAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                end();
+                addProxy();
             }
         });
         menuProxiesRemove.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                end();
+                removeProxy();
             }
         });
         menuDropWorkload.addActionListener(new ActionListener() {
@@ -416,9 +416,9 @@ public class MainForm extends JFrame {
         toolBar.addSeparator();
         toolBar.add(buttonAddProxy);
         toolBar.add(buttonRemoveProxy);
-        toolBar.addSeparator();
-        toolBar.add(buttonCreateWorkload);
-        toolBar.add(buttonDropWorkload);
+        //toolBar.addSeparator();
+        //toolBar.add(buttonCreateWorkload);
+        //toolBar.add(buttonDropWorkload);
         toolBar.addSeparator();
         toolBar.add(buttonCreateDatabase);
         toolBar.add(buttonDropDatabase);
