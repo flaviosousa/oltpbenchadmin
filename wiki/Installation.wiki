@@ -12,6 +12,9 @@ The oltpbenchadmin's tool has two software components: (i)  oltpbenchmark-proxy 
   # Open your terminal command line and enter the root directory of the unzipped file
   # Run the file *oltpbechmark-proxy.sh* to install the required components. To run the file *oltpbenchadmin-proxy.sh*, you must use the following command syntax `./oltpbenchmark-proxy.sh <root directory of the oltpbenchmark>`
     * Do not forget to check if the root directory of the oltpbenchmark has write permission and that the file *oltpbenchmark-proxy.sh* has execute permission
+  # Use the command `java -jar oltpbenchadmin-proxy.jar <port>`
+  # Edit the generated file *oltpbenchadmin-proxy.xml* in the root directory and add the database user/password   
+  # Finally, to start the proxy, use the command `java -jar oltpbenchadmin-proxy.jar <port>`
 
 ==Installing oltpbenchadmin (the graphical interface)==
 
