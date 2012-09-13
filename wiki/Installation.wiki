@@ -1,5 +1,7 @@
 #summary Tutorial of the tool's installation.
 
+#sidebar
+
 =Installing the oltpbenchadmin=
 
 The oltpbenchadmin's tool has two software components: (i)  oltpbenchmark-proxy is a proxy that interacts with the oltpbenchmark 
